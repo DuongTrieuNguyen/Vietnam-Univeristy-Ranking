@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Hệ thống Xếp hạng và Công cụ Tạo Card Đại học</title>
+<style>
+body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding: 40px; max-width: 900px; margin: auto; }
+.card { background-color: #f4ece6; padding: 25px; border-radius: 12px; border: 1px solid #e3d5cb; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+.logo-me { width: 180px; height: 130px; object-fit: contain; vertical-align: middle; margin-right: 15px; }
+.logo-con { width: 50px; height: 50px; object-fit: contain; vertical-align: middle; margin-right: 10px; }
+
+/* Bảng màu Badge điểm số */
+.badge { padding: 3px 8px; border-radius: 4px; font-weight: bold; color: #ffffff; font-size: 0.9em; }
+.badge-red { background-color: #d9534f; }
+.badge-dark-yellow { background-color: #d97706; }
+.badge-light-yellow { background-color: #ca8a04; }
+.badge-light-green { background-color: #06b6d4; }
+.badge-green { background-color: #22c55e; }
+.badge-dark-green { background-color: #15803d; }
+
+/* Thanh tiến độ */
+.progress-bar-bg { background-color: #e3d5cb; border-radius: 8px; height: 10px; width: 100%; margin-top: 5px; margin-bottom: 15px; overflow: hidden; }
+.progress-bar-fill { height: 100%; border-radius: 8px; }
+
+/* Form nhập liệu Tool */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #5c4033; }
+.form-group input, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #e3d5cb; background-color: #fffcf9; font-family: Cambria; box-sizing: border-box; }
+.btn { background-color: #6b4f3f; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: Cambria; font-size: 1em; }
+.btn:hover { background-color: #553d31; }
+
+.download-box { background: #faede3; padding: 15px; border-radius: 8px; border: 1px dashed #c4a493; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Bảng xếp hạng và đánh giá các Đại học ở Việt Nam</h2>
+    <p>Tiên học lễ, hậu học văn — Xây dựng theo công thức chuẩn hóa v6.2[cite: 5].</p>
+    
+
+    <div class="download-box">
+        <div>
+            <strong>Tài liệu tham khảo:</strong> 
+            <p>Công thức tính toán xếp hạng v6.2[cite: 5].</p>
+        </div>
+
+        <a href="#" download class="btn" style="text-decoration: none; font-size: 0.9em; padding: 8px 15px;">Tải File Công Thức (.docx)</a>
+    </div>
+</div>
+
+<div class="card" style="border: 2px dashed #b08d79;">
+    <h3>Công Cụ Tạo & Tùy Chỉnh Thẻ Trường Đại Học</h3>
+    <p style="font-size: 0.9em; margin-bottom: 15px;">Điền thông tin và các điểm số tiêu chí bên dưới để hệ thống tự động sinh card hiển thị.</p>
+    
+    <div class="form-group">
+        <label>Tên Trường Đại Học:</label>
+        <input type="text" id="inputName" value="Đại học Quốc gia Thành phố Hồ Chí Minh">
+    </div>
+    
+    <div class="form-group">
+        <label>Link Ảnh Logo Trường (URL):</label>
+        <input type="text" id="inputLogo" value="https://upload.wikimedia.org/wikipedia/vi/f/fb/VNUHCM_logo.svg">
+    </div>
+
+    <div class="form-group">
+        <label>Mô tả ngắn về trường:</label>
+        <textarea id="inputDesc" rows="2">Là một trong hai Đại học Quốc gia ở Việt Nam, đóng vai trò quan trọng trong giáo dục bậc cao khu vực miền Nam.</textarea>
+    </div>
+
+    <h4 style="margin-top: 20px; color: #5c4033; border-bottom: 1px solid #e3d5cb; padding-bottom: 5px;">Điểm số các Tiêu chí (Theo công thức v6.2[cite: 5])</h4>
+    
+    <div style="display: flex; gap: 15px;">
+        <div class="form-group" style="flex: 1;">
+            <label>1. Độ phủ Tổng quát (20 điểm):</label>
+            <input type="number" id="scorePTQ" value="18" step="0.1">
+        </div>
+        <div class="form-group" style="flex: 1;">
+            <label>2. Độ phủ Chi tiết (15 điểm):</label>
+            <input type="number" id="scorePCT" value="11.08" step="0.01">
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px;">
+        <div class="form-group" style="flex: 1;">
+            <label>3. Độ mở với người học (15 điểm):</label>
+            <input type="number" id="scoreDMNH" value="1.96" step="0.01">
+        </div>
+        <div class="form-group" style="flex: 1;">
+            <label>4. Mức độ thu hút (15 điểm):</label>
+            <input type="number" id="scoreMDTH" value="4.24" step="0.01">
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 15px;">
+        <div class="form-group" style="flex: 1;">
+            <label>5. Mức liên kết (15 điểm):</label>
+            <input type="number" id="scoreMLK" value="22.3" step="0.01">
+        </div>
+        <div class="form-group" style="flex: 1;">
+            <label>6. Điểm thi đua (15 điểm):</label>
+            <input type="number" id="scoreTD" value="11.4" step="0.01">
+        </div>
+    </div>
+
+    <button class="btn" onclick="generateCard()">Tạo / Cập Nhật Card Đại Học</button>
+</div>
+
+<h1>Danh mục trường đã xếp hạng</h1>
+
+
+<div id="cardContainer">
+   
+    <div class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/vi/f/fb/VNUHCM_logo.svg" class="logo-me">
+        <h2>Đại học Quốc gia Thành phố Hồ Chí Minh</h2>
+        <p>Là một trong hai Đại học Quốc gia ở Việt Nam, Đại học Quốc gia Thành phố Hồ Chí Minh có vai trò quan trọng trong công tác giáo dục đại học ở khu vực miền Nam nước ta.</p>
+        
+        <hr style="border: 0; border-top: 1px solid #e3d5cb; margin: 15px 0;">
+        
+        <h3>Điểm đánh giá tổng thể: <span class="badge badge-dark-green">~88,98 điểm</span></h3>
+        <div class="progress-bar-bg"><div class="progress-bar-fill badge-dark-green" style="width: 89%;"></div></div>
+
+        <details>
+            <summary style="cursor: pointer; font-weight: bold; color: #6b4f3f;">Chi tiết từng phần điểm</summary>
+            <div style="margin-top: 15px;">
+                <div><strong>1. Độ phủ Tổng quát:</strong> <span class="badge badge-green">18 / 20 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill badge-green" style="width: 90%;"></div></div>
+                </div>
+                <div><strong>2. Độ phủ Chi tiết:</strong> <span class="badge badge-light-green">~11.08 / 15 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill badge-light-green" style="width: 74%;"></div></div>
+                </div>
+                <div><strong>3. Độ mở với người học:</strong> <span class="badge badge-red">~1.96 / 15 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill badge-red" style="width: 13%;"></div></div>
+                </div>
+                <div><strong>4. Mức độ thu hút:</strong> <span class="badge badge-dark-yellow">~4.24 / 15 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill badge-dark-yellow" style="width: 28%;"></div></div>
+                </div>
+                <div><strong>5. Mức liên kết:</strong> <span class="badge badge-dark-green">~22.3 / 25 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill badge-dark-green" style="width: 90%;"></div></div>
+                </div>
+                <div><strong>6. Điểm thi đua:</strong> <span class="badge badge-green">~11.4 / 15 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill badge-green" style="width: 76%;"></div></div>
+                </div>
+            </div>
+        </details>
+    </div>
+</div>
+
+<script>
+// Hàm tự động chọn màu badge dựa trên giá trị điểm hoặc phần trăm
+function getColorClass(val, maxVal) {
+    let p = (val / maxVal) * 100;
+    if (p < 30) return 'badge-red';
+    if (p < 45) return 'badge-dark-yellow';
+    if (p < 60) return 'badge-light-yellow';
+    if (p < 70) return 'badge-light-green';
+    if (p < 80) return 'badge-green';
+    return 'badge-dark-green';
+}
+
+function generateCard() {
+    // Lấy dữ liệu từ form
+    let name = document.getElementById('inputName').value;
+    let logo = document.getElementById('inputLogo').value;
+    let desc = document.getElementById('inputDesc').value;
+    
+    let ptq = parseFloat(document.getElementById('scorePTQ').value) || 0;
+    let pct = parseFloat(document.getElementById('scorePCT').value) || 0;
+    let dmnh = parseFloat(document.getElementById('scoreDMNH').value) || 0;
+    let mdth = parseFloat(document.getElementById('scoreMDTH').value) || 0;
+    let mlk = parseFloat(document.getElementById('scoreMLK').value) || 0;
+    let td = parseFloat(document.getElementById('scoreTD').value) || 0;
+    
+    // Tính tổng điểm
+    let total = ptq + pct + dmnh + mdth + mlk + td;
+    
+    // Xác định màu tổng thể
+    let totalColor = getColorClass(total, 100);
+    
+    // Tạo mã HTML cho Card mới
+    let cardHTML = `
+    <div class="card">
+        <img src="${logo}" class="logo-me" onerror="this.src='https://via.placeholder.com/180x130?text=Logo'">
+        <h2>${name}</h2>
+        <p>${desc}</p>
+        
+        <hr style="border: 0; border-top: 1px solid #e3d5cb; margin: 15px 0;">
+        
+        <h3>Điểm đánh giá tổng thể: <span class="badge ${totalColor}">~${total.toFixed(2)} điểm</span></h3>
+        <div class="progress-bar-bg"><div class="progress-bar-fill ${totalColor}" style="width: ${total}%;"></div></div>
+
+        <details open>
+            <summary style="cursor: pointer; font-weight: bold; color: #6b4f3f;">Chi tiết từng phần điểm ▼</summary>
+            <div style="margin-top: 15px;">
+                <div><strong>1. Độ phủ Tổng quát:</strong> <span class="badge ${getColorClass(ptq, 20)}">${ptq} / 20 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill ${getColorClass(ptq, 20)}" style="width: ${(ptq/20)*100}%;"></div></div>
+                </div>
+                <div><strong>2. Độ phủ Chi tiết:</strong> <span class="badge ${getColorClass(pct, 15)}">~${pct} / 15 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill ${getColorClass(pct, 15)}" style="width: ${(pct/15)*100}%;"></div></div>
+                </div>
+                <div><strong>3. Độ mở với người học:</strong> <span class="badge ${getColorClass(dmnh, 15)}">~${dmnh} / 15 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill ${getColorClass(dmnh, 15)}" style="width: ${(dmnh/15)*100}%;"></div></div>
+                </div>
+                <div><strong>4. Mức độ thu hút:</strong> <span class="badge ${getColorClass(mdth, 15)}">~${mdth} / 15 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill ${getColorClass(mdth, 15)}" style="width: ${(mdth/15)*100}%;"></div></div>
+                </div>
+                <div><strong>5. Mức liên kết:</strong> <span class="badge ${getColorClass(mlk, 25)}">~${mlk} / 25 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill ${getColorClass(mlk, 25)}" style="width: ${(mlk/25)*100}%;"></div></div>
+                </div>
+                <div><strong>6. Điểm thi đua:</strong> <span class="badge ${getColorClass(td, 15)}">~${td} / 15 điểm</span>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill ${getColorClass(td, 15)}" style="width: ${(td/15)*100}%;"></div></div>
+                </div>
+            </div>
+        </details>
+    </div>`;
+    
+    // Đưa card mới lên đầu danh sách
+    document.getElementById('cardContainer').innerHTML = cardHTML + document.getElementById('cardContainer').innerHTML;
+    alert("Đã tạo và cập nhật card đại học thành công!");
+}
+</script>
+
+</body>
+</html>
