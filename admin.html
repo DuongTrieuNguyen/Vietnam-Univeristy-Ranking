@@ -2,22 +2,25 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Trang Quản Trị - Thêm Trường Đại Học</title>
+<title>Trang Quản Trị - Xếp Hạng Đại Học</title>
 <style>
 body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding: 40px; max-width: 700px; margin: auto; }
-.card { background-color: #f4ece6; padding: 25px; border-radius: 12px; border: 1px solid #e3d5cb; margin-bottom: 25px; }
+.card { background-color: #f4ece6; padding: 25px; border-radius: 12px; border: 1px solid #e3d5cb; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #5c4033; }
 .form-group input, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #e3d5cb; background-color: #fffcf9; font-family: Cambria; box-sizing: border-box; }
 .btn { background-color: #6b4f3f; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: Cambria; }
 .btn:hover { background-color: #553d31; }
-/* Mặc định ẩn bảng quản trị */
+.back-link { display: inline-block; margin-bottom: 20px; color: #6b4f3f; text-decoration: none; font-weight: bold; }
+/* Ban đầu ẩn phần quản trị đi */
 #adminPanel { display: none; }
 </style>
 </head>
 <body>
 
-<!-- KHUNG ĐĂNG NHẬP -->
+<a href="index.html" class="back-link">← Quay lại Trang Chủ</a>
+
+<!-- KHUNG ĐĂNG NHẬP MẬT KHẨU -->
 <div class="card" id="loginBox">
     <h3>🔐 Đăng Nhập Quyền Quản Trị</h3>
     <div class="form-group">
@@ -27,7 +30,7 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
     <button class="btn" onclick="checkLogin()">Xác Nhận</button>
 </div>
 
-<!-- KHUNG NHẬP LIỆU (Sẽ hiện ra khi nhập đúng mật khẩu) -->
+<!-- KHUNG NHẬP LIỆU QUẢN TRỊ (CHỈ HIỆN KHI ĐÚNG MẬT KHẨU) -->
 <div class="card" id="adminPanel">
     <h2>🛠️ Thêm Trường Đại Học Mới Lên Mây</h2>
     
@@ -81,7 +84,6 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Gắn hàm checkLogin ra phạm vi toàn cục để nút bấm HTML gọi được
   window.checkLogin = function() {
       let pass = document.getElementById('adminPass').value;
       if(pass === "admin123") {
@@ -115,7 +117,7 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
               mdth: mdth, mlk: mlk, td: td,
               createdAt: new Date()
           });
-          alert("Thêm trường thành công! Mở trang chủ xem kết quả ngay.");
+          alert("Thêm trường thành công! Bấm về trang chủ để kiểm tra ngay.");
           location.reload();
       } catch (e) {
           alert("Lỗi: " + e.message);
