@@ -15,7 +15,7 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
 .badge-green { background-color: #22c55e; }
 .badge-dark-green { background-color: #15803d; }
 .progress-bar-bg { background-color: #e3d5cb; border-radius: 8px; height: 10px; width: 100%; margin-top: 5px; margin-bottom: 15px; overflow: hidden; }
-.progress-bar-fill { height: 100%; border-radius: 8px; }
+.progress-bar-fill { height: 100%; border-radius: 8px; transition: width 0.5s ease; }
 .admin-link { float: right; font-size: 0.9em; color: #6b4f3f; text-decoration: none; border: 1px solid #6b4f3f; padding: 5px 10px; border-radius: 6px; }
 .admin-link:hover { background-color: #6b4f3f; color: white; }
 </style>
@@ -68,33 +68,51 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
               container.innerHTML = "<p>Chưa có trường nào trên hệ thống.</p>";
               return;
           }
+          
+          let htmlContent = "";
           querySnapshot.forEach((doc) => {
               let d = doc.data();
-              let total = Number(d.ptq) + Number(d.pct) + Number(d.dmnh) + Number(d.mdth) + Number(d.mlk) + Number(d.td);
+              
+              // Bỏ qua nếu dữ liệu bị thiếu tên trường (lọc sạch các bản ghi rác)
+              if(!d.name) return;
+
+              let ptq = Number(d.ptq) || 0;
+              let pct = Number(d.pct) || 0;
+              let dmnh = Number(d.dmnh) || 0;
+              let mdth = Number(d.mdth) || 0;
+              let mlk = Number(d.mlk) || 0;
+              let td = Number(d.td) || 0;
+
+              let total = ptq + pct + dmnh + mdth + mlk + td;
               let totalColor = getColorClass(total, 100);
 
-              let html = `
+              htmlContent += `
               <div class="card">
                   <img src="${d.logo}" class="logo-me" onerror="this.src='https://via.placeholder.com/180x130?text=Logo'">
                   <h2>${d.name}</h2>
-                  <p>${d.desc}</p>
+                  <p>${d.desc || ''}</p>
                   <hr style="border: 0; border-top: 1px solid #e3d5cb; margin: 15px 0;">
                   <h3>Điểm đánh giá tổng thể: <span class="badge ${totalColor}">~${total.toFixed(2)} điểm</span></h3>
                   <div class="progress-bar-bg"><div class="progress-bar-fill ${totalColor}" style="width: ${total}%;"></div></div>
                   <details>
                       <summary style="cursor: pointer; font-weight: bold; color: #6b4f3f;">Chi tiết từng phần điểm ▼</summary>
                       <div style="margin-top: 15px;">
-                          <div><strong>1. Độ phủ Tổng quát:</strong> <span class="badge ${getColorClass(d.ptq, 20)}">${d.ptq} / 20 điểm</span></div>
-                          <div><strong>2. Độ phủ Chi tiết:</strong> <span class="badge ${getColorClass(d.pct, 15)}">~${d.pct} / 15 điểm</span></div>
-                          <div><strong>3. Độ mở với người học:</strong> <span class="badge ${getColorClass(d.dmnh, 15)}">~${d.dmnh} / 15 điểm</span></div>
-                          <div><strong>4. Mức độ thu hút:</strong> <span class="badge ${getColorClass(d.mdth, 15)}">~${d.mdth} / 15 điểm</span></div>
-                          <div><strong>5. Mức liên kết:</strong> <span class="badge ${getColorClass(d.mlk, 25)}">~${d.mlk} / 25 điểm</span></div>
-                          <div><strong>6. Điểm thi đua:</strong> <span class="badge ${getColorClass(d.td, 15)}">~${d.td} / 15 điểm</span></div>
+                          <div><strong>1. Độ phủ Tổng quát:</strong> <span class="badge ${getColorClass(ptq, 20)}">${ptq} / 20 điểm</span></div>
+                          <div><strong>2. Độ phủ Chi tiết:</strong> <span class="badge ${getColorClass(pct, 15)}">~${pct} / 15 điểm</span></div>
+                          <div><strong>3. Độ mở với người học:</strong> <span class="badge ${getColorClass(dmnh, 15)}">~${dmnh} / 15 điểm</span></div>
+                          <div><strong>4. Mức độ thu hút:</strong> <span class="badge ${getColorClass(mdth, 15)}">~${mdth} / 15 điểm</span></div>
+                          <div><strong>5. Mức liên kết:</strong> <span class="badge ${getColorClass(mlk, 25)}">~${mlk} / 25 điểm</span></div>
+                          <div><strong>6. Điểm thi đua:</strong> <span class="badge ${getColorClass(td, 15)}">~${td} / 15 điểm</span></div>
                       </div>
                   </details>
               </div>`;
-              container.innerHTML += html;
           });
+
+          if(htmlContent === "") {
+              container.innerHTML = "<p>Chưa có trường hợp lệ nào trên hệ thống.</p>";
+          } else {
+              container.innerHTML = htmlContent;
+          }
       } catch (e) {
           container.innerHTML = "<p>Lỗi tải dữ liệu: " + e.message + "</p>";
       }
