@@ -6,22 +6,13 @@
 <style>
 body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding: 40px; max-width: 900px; margin: auto; }
 .card { background-color: #f4ece6; padding: 25px; border-radius: 12px; border: 1px solid #e3d5cb; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-.logo-me { width: 180px; height: 130px; object-fit: contain; vertical-align: middle; margin-right: 15px; }
-.badge { padding: 3px 8px; border-radius: 4px; font-weight: bold; color: #ffffff; font-size: 0.9em; }
-.badge-red { background-color: #d9534f; }
-.badge-dark-yellow { background-color: #d97706; }
-.badge-light-yellow { background-color: #ca8a04; }
-.badge-light-green { background-color: #06b6d4; }
-.badge-green { background-color: #22c55e; }
-.badge-dark-green { background-color: #15803d; }
-.progress-bar-bg { background-color: #e3d5cb; border-radius: 8px; height: 10px; width: 100%; margin-top: 5px; margin-bottom: 15px; overflow: hidden; }
-.progress-bar-fill { height: 100%; border-radius: 8px; }
+.logo-me { width: 50px; height: 50px; object-fit: contain; vertical-align: middle; margin-right: 15px; }
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #5c4033; }
 .form-group input, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #e3d5cb; background-color: #fffcf9; font-family: Cambria; box-sizing: border-box; }
 .btn { background-color: #6b4f3f; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: Cambria; font-size: 1em; }
 .btn:hover { background-color: #553d31; }
-.btn-danger { background-color: #d9534f; padding: 8px 15px; font-size: 0.9em; margin-top: 10px; }
+.btn-danger { background-color: #d9534f; padding: 8px 15px; font-size: 0.9em; }
 .btn-danger:hover { background-color: #c9302c; }
 .back-link { display: inline-block; margin-bottom: 20px; color: #6b4f3f; text-decoration: none; font-weight: bold; }
 #adminPanel { display: none; }
@@ -31,15 +22,17 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
 
 <a href="index.html" class="back-link">← Quay lại Trang Chủ</a>
 
+<!-- KHUNG ĐĂNG NHẬP MẬT KHẨU -->
 <div class="card" id="loginBox">
     <h3>🔐 Đăng Nhập Quyền Quản Trị</h3>
     <div class="form-group">
-        <label>Nhập mật khẩu Admin:</label>
-        <input type="password" id="adminPass" placeholder="Mật khẩu mặc định: admin123">
+        <label>Nhập mật khẩu Admin (mặc định: admin123):</label>
+        <input type="password" id="adminPass" placeholder="Nhập mật khẩu...">
     </div>
     <button class="btn" onclick="checkLogin()">Xác Nhận</button>
 </div>
 
+<!-- KHUNG QUẢN TRỊ VÀ NHẬP LIỆU -->
 <div id="adminPanel">
     <div class="card" style="border: 2px dashed #b08d79;">
         <h3>🛠️ Thêm Trường Đại Học Mới Lên Mây</h3>
@@ -64,7 +57,7 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
         <button class="btn" onclick="addNewUniversity()">💾 Lưu Lên Hệ Thống Mây</button>
     </div>
 
-    <h2>🗑️ Quản Lý & Xóa Trường Đã Đăng</h2>
+    <h2>🗑️ Danh Sách Trường Đã Đăng & Nút Xóa</h2>
     <div id="adminListContainer">Đang tải danh sách...</div>
 </div>
 
@@ -118,10 +111,13 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
 
   async function loadAdminList() {
       const container = document.getElementById('adminListContainer');
-      container.innerHTML = "Đang tải...";
+      container.innerHTML = "Đang tải danh sách trường...";
       try {
           const querySnapshot = await getDocs(collection(db, "universities"));
-          if(querySnapshot.empty) { container.innerHTML = "<p>Chưa có trường nào.</p>"; return; }
+          if(querySnapshot.empty) { 
+              container.innerHTML = "<p>Chưa có trường nào trên hệ thống.</p>"; 
+              return; 
+          }
           
           let html = "";
           querySnapshot.forEach((docItem) => {
@@ -130,14 +126,16 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
               html += `
               <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
                   <div>
-                      <img src="${d.logo}" style="width:50px; height:50px; object-fit:contain; vertical-align:middle; margin-right:15px;">
+                      <img src="${d.logo}" class="logo-me" onerror="this.src='https://via.placeholder.com/50?text=Logo'">
                       <strong>${d.name}</strong>
                   </div>
                   <button class="btn btn-danger" onclick="deleteUniversity('${docItem.id}')">🗑️ Xóa Trường Này</button>
               </div>`;
           });
           container.innerHTML = html;
-      } catch (e) { container.innerHTML = "Lỗi tải: " + e.message; }
+      } catch (e) { 
+          container.innerHTML = "Lỗi tải dữ liệu: " + e.message; 
+      }
   }
 
   window.deleteUniversity = async function(id) {
@@ -146,7 +144,9 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
               await deleteDoc(doc(db, "universities", id));
               alert("Đã xóa thành công!");
               loadAdminList();
-          } catch(e) { alert("Lỗi khi xóa: " + e.message); }
+          } catch(e) { 
+              alert("Lỗi khi xóa: " + e.message); 
+          }
       }
   }
 </script>
