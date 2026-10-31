@@ -4,15 +4,32 @@
 <meta charset="UTF-8">
 <title>Trang Quản Trị - Xếp Hạng Đại Học</title>
 <style>
-body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding: 40px; max-width: 700px; margin: auto; }
+body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding: 40px; max-width: 900px; margin: auto; }
 .card { background-color: #f4ece6; padding: 25px; border-radius: 12px; border: 1px solid #e3d5cb; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+.logo-me { width: 180px; height: 130px; object-fit: contain; vertical-align: middle; margin-right: 15px; }
+
+/* Bảng màu Badge điểm số */
+.badge { padding: 3px 8px; border-radius: 4px; font-weight: bold; color: #ffffff; font-size: 0.9em; }
+.badge-red { background-color: #d9534f; }
+.badge-dark-yellow { background-color: #d97706; }
+.badge-light-yellow { background-color: #ca8a04; }
+.badge-light-green { background-color: #06b6d4; }
+.badge-green { background-color: #22c55e; }
+.badge-dark-green { background-color: #15803d; }
+
+/* Thanh tiến độ */
+.progress-bar-bg { background-color: #e3d5cb; border-radius: 8px; height: 10px; width: 100%; margin-top: 5px; margin-bottom: 15px; overflow: hidden; }
+.progress-bar-fill { height: 100%; border-radius: 8px; }
+
+/* Form nhập liệu Tool */
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #5c4033; }
 .form-group input, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #e3d5cb; background-color: #fffcf9; font-family: Cambria; box-sizing: border-box; }
-.btn { background-color: #6b4f3f; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: Cambria; }
+.btn { background-color: #6b4f3f; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: Cambria; font-size: 1em; }
 .btn:hover { background-color: #553d31; }
 .back-link { display: inline-block; margin-bottom: 20px; color: #6b4f3f; text-decoration: none; font-weight: bold; }
-/* Ban đầu ẩn phần quản trị đi */
+
+/* Mặc định ẩn bảng quản trị đi chờ nhập mật khẩu */
 #adminPanel { display: none; }
 </style>
 </head>
@@ -30,41 +47,46 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
     <button class="btn" onclick="checkLogin()">Xác Nhận</button>
 </div>
 
-<!-- KHUNG NHẬP LIỆU QUẢN TRỊ (CHỈ HIỆN KHI ĐÚNG MẬT KHẨU) -->
-<div class="card" id="adminPanel">
-    <h2>🛠️ Thêm Trường Đại Học Mới Lên Mây</h2>
-    
-    <div class="form-group">
-        <label>Tên Trường Đại Học:</label>
-        <input type="text" id="inputName" placeholder="VD: Đại học Quốc gia TP.HCM">
-    </div>
-    
-    <div class="form-group">
-        <label>Link Ảnh Logo Trường (URL):</label>
-        <input type="text" id="inputLogo" value="https://upload.wikimedia.org/wikipedia/vi/f/fb/VNUHCM_logo.svg">
-    </div>
+<!-- KHUNG QUẢN TRỊ CHÍNH -->
+<div id="adminPanel">
+    <div class="card" style="border: 2px dashed #b08d79;">
+        <h3>Công Cụ Tạo & Lưu Trường Đại Học Lên Mây</h3>
+        <p style="font-size: 0.9em; margin-bottom: 15px;">Điền thông tin và các điểm số tiêu chí bên dưới để hệ thống đồng bộ trực tiếp lên hệ thống.</p>
+        
+        <div class="form-group">
+            <label>Tên Trường Đại Học:</label>
+            <input type="text" id="inputName" value="Đại học Quốc gia Thành phố Hồ Chí Minh">
+        </div>
+        
+        <div class="form-group">
+            <label>Link Ảnh Logo Trường (URL):</label>
+            <input type="text" id="inputLogo" value="https://upload.wikimedia.org/wikipedia/vi/f/fb/VNUHCM_logo.svg">
+        </div>
 
-    <div class="form-group">
-        <label>Mô tả ngắn về trường:</label>
-        <textarea id="inputDesc" rows="2">Mô tả ngắn gọn về trường...</textarea>
-    </div>
+        <div class="form-group">
+            <label>Mô tả ngắn về trường:</label>
+            <textarea id="inputDesc" rows="2">Là một trong hai Đại học Quốc gia ở Việt Nam, đóng vai trò quan trọng trong giáo dục bậc cao khu vực miền Nam.</textarea>
+        </div>
 
-    <div style="display: flex; gap: 15px;">
-        <div class="form-group" style="flex: 1;"><label>1. Độ phủ Tổng quát (Max 20):</label><input type="number" id="scorePTQ" value="18"></div>
-        <div class="form-group" style="flex: 1;"><label>2. Độ phủ Chi tiết (Max 15):</label><input type="number" id="scorePCT" value="11.08"></div>
-    </div>
+        <h4 style="margin-top: 20px; color: #5c4033; border-bottom: 1px solid #e3d5cb; padding-bottom: 5px;">Điểm số các Tiêu chí (Theo công thức v6.2)</h4>
+        
+        <div style="display: flex; gap: 15px;">
+            <div class="form-group" style="flex: 1;"><label>1. Độ phủ Tổng quát (20 điểm):</label><input type="number" id="scorePTQ" value="18" step="0.1"></div>
+            <div class="form-group" style="flex: 1;"><label>2. Độ phủ Chi tiết (15 điểm):</label><input type="number" id="scorePCT" value="11.08" step="0.01"></div>
+        </div>
 
-    <div style="display: flex; gap: 15px;">
-        <div class="form-group" style="flex: 1;"><label>3. Độ mở với người học (Max 15):</label><input type="number" id="scoreDMNH" value="1.96"></div>
-        <div class="form-group" style="flex: 1;"><label>4. Mức độ thu hút (Max 15):</label><input type="number" id="scoreMDTH" value="4.24"></div>
-    </div>
+        <div style="display: flex; gap: 15px;">
+            <div class="form-group" style="flex: 1;"><label>3. Độ mở với người học (15 điểm):</label><input type="number" id="scoreDMNH" value="1.96" step="0.01"></div>
+            <div class="form-group" style="flex: 1;"><label>4. Mức độ thu hút (15 điểm):</label><input type="number" id="scoreMDTH" value="4.24" step="0.01"></div>
+        </div>
 
-    <div style="display: flex; gap: 15px;">
-        <div class="form-group" style="flex: 1;"><label>5. Mức liên kết (Max 25):</label><input type="number" id="scoreMLK" value="22.3"></div>
-        <div class="form-group" style="flex: 1;"><label>6. Điểm thi đua (Max 15):</label><input type="number" id="scoreTD" value="11.4"></div>
-    </div>
+        <div style="display: flex; gap: 15px;">
+            <div class="form-group" style="flex: 1;"><label>5. Mức liên kết (25 điểm):</label><input type="number" id="scoreMLK" value="22.3" step="0.01"></div>
+            <div class="form-group" style="flex: 1;"><label>6. Điểm thi đua (15 điểm):</label><input type="number" id="scoreTD" value="11.4" step="0.01"></div>
+        </div>
 
-    <button class="btn" onclick="addNewUniversity()">💾 Lưu Lên Hệ Thống Mây</button>
+        <button class="btn" onclick="addNewUniversity()">💾 Lưu Lên Hệ Thống Mây</button>
+    </div>
 </div>
 
 <script type="module">
@@ -117,7 +139,7 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
               mdth: mdth, mlk: mlk, td: td,
               createdAt: new Date()
           });
-          alert("Thêm trường thành công! Bấm về trang chủ để kiểm tra ngay.");
+          alert("Thêm trường lên mây thành công! Mở trang chủ để xem đầy đủ thanh tiến trình.");
           location.reload();
       } catch (e) {
           alert("Lỗi: " + e.message);
