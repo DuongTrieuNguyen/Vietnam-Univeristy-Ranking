@@ -11,13 +11,13 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
 .form-group input, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #e3d5cb; background-color: #fffcf9; font-family: Cambria; box-sizing: border-box; }
 .btn { background-color: #6b4f3f; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: Cambria; }
 .btn:hover { background-color: #553d31; }
-/* Mặc định ẩn bảng quản trị đi */
+/* Mặc định ẩn bảng quản trị */
 #adminPanel { display: none; }
 </style>
 </head>
 <body>
 
-<!-- KHUNG NHẬP MẬT KHẨU -->
+<!-- KHUNG ĐĂNG NHẬP -->
 <div class="card" id="loginBox">
     <h3>🔐 Đăng Nhập Quyền Quản Trị</h3>
     <div class="form-group">
@@ -27,7 +27,7 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
     <button class="btn" onclick="checkLogin()">Xác Nhận</button>
 </div>
 
-<!-- KHUNG NHẬP LIỆU -->
+<!-- KHUNG NHẬP LIỆU (Sẽ hiện ra khi nhập đúng mật khẩu) -->
 <div class="card" id="adminPanel">
     <h2>🛠️ Thêm Trường Đại Học Mới Lên Mây</h2>
     
@@ -81,6 +81,7 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // Gắn hàm checkLogin ra phạm vi toàn cục để nút bấm HTML gọi được
   window.checkLogin = function() {
       let pass = document.getElementById('adminPass').value;
       if(pass === "admin123") {
