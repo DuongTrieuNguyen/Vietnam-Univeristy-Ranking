@@ -41,6 +41,18 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
         <div class="form-group"><label>Link Ảnh Logo Trường (URL):</label><input type="text" id="inputLogo" value="https://upload.wikimedia.org/wikipedia/vi/f/fb/VNUHCM_logo.svg"></div>
         <div class="form-group"><label>Mô tả ngắn về trường:</label><textarea id="inputDesc" rows="2">Là một trong hai Đại học Quốc gia ở Việt Nam.</textarea></div>
 
+        <!-- MỤC TRƯỜNG THÀNH VIÊN -->
+        <h4 style="margin-top: 20px; color: #5c4033; border-bottom: 1px solid #e3d5cb; padding-bottom: 5px;">🏛️ Các Trường Thành Viên (Nhập phân cách bằng dấu phẩy)</h4>
+        <div class="form-group">
+            <label>Tên các trường thành viên:</label>
+            <input type="text" id="inputMemberNames" placeholder="Ví dụ: ĐH Bách Khoa, ĐH Khoa học Tự nhiên, ĐH CNTT">
+        </div>
+        <div class="form-group">
+            <label>Link logo các trường thành viên (URL):</label>
+            <input type="text" id="inputMemberLogos" placeholder="LinkLogo1, LinkLogo2, LinkLogo3">
+        </div>
+
+        <h4 style="margin-top: 20px; color: #5c4033; border-bottom: 1px solid #e3d5cb; padding-bottom: 5px;">📊 Điểm Số Các Tiêu Chí (Theo v6.2)</h4>
         <div style="display: flex; gap: 15px;">
             <div class="form-group" style="flex: 1;"><label>1. Độ phủ Tổng quát (x20):</label><input type="number" id="scorePTQ" value="18" step="0.1"></div>
             <div class="form-group" style="flex: 1;"><label>2. Độ phủ Chi tiết (x15):</label><input type="number" id="scorePCT" value="11.08" step="0.01"></div>
@@ -97,18 +109,25 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
       let name = document.getElementById('inputName').value;
       let logo = document.getElementById('inputLogo').value;
       let desc = document.getElementById('inputDesc').value;
+      let memberNames = document.getElementById('inputMemberNames').value;
+      let memberLogos = document.getElementById('inputMemberLogos').value;
+
       let ptq = parseFloat(document.getElementById('scorePTQ').value) || 0;
       let pct = parseFloat(document.getElementById('scorePCT').value) || 0;
       let dmnh = parseFloat(document.getElementById('scoreDMNH').value) || 0;
       let mdth = parseFloat(document.getElementById('scoreMDTH').value) || 0;
       let mlk = parseFloat(document.getElementById('scoreMLK').value) || 0;
       let td = parseFloat(document.getElementById('scoreTD').value) || 0;
-      let ddgtq = parseFloat(document.getElementById('scoreDDGTQ').value) || 0; // Đã bổ sung biến số 7
+      let ddgtq = parseFloat(document.getElementById('scoreDDGTQ').value) || 0;
 
       if(!name) { alert("Vui lòng nhập tên trường!"); return; }
 
       try {
-          await addDoc(collection(db, "universities"), { name, logo, desc, ptq, pct, dmnh, mdth, mlk, td, ddgtq, createdAt: new Date() });
+          await addDoc(collection(db, "universities"), { 
+              name, logo, desc, memberNames, memberLogos,
+              ptq, pct, dmnh, mdth, mlk, td, ddgtq, 
+              createdAt: new Date() 
+          });
           alert("Thêm trường thành công!");
           loadAdminList();
       } catch (e) { alert("Lỗi: " + e.message); }
