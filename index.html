@@ -7,8 +7,12 @@
 body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding: 40px; max-width: 900px; margin: auto; }
 .card { background-color: #f4ece6; padding: 25px; border-radius: 12px; border: 1px solid #e3d5cb; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
 .logo-me { width: 180px; height: 130px; object-fit: contain; vertical-align: middle; margin-right: 15px; }
-.logo-con { width: 45px; height: 45px; object-fit: contain; vertical-align: middle; margin-right: 8px; }
-.member-unit { display: inline-flex; align-items: center; background: #ebdcd0; padding: 6px 12px; border-radius: 8px; margin: 5px 8px 5px 0; font-size: 0.9em; font-weight: bold; color: #5c4033; }
+.logo-con { width: 35px; height: 35px; object-fit: contain; vertical-align: middle; margin-right: 10px; }
+
+/* Danh sách trường thành viên dạng ẩn/hiện gọn gàng */
+.member-dropdown { margin: 15px 0; background: #fffcf9; border: 1px solid #e3d5cb; border-radius: 8px; padding: 10px 15px; }
+.member-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px dashed #e3d5cb; font-size: 0.95em; }
+.member-item:last-child { border-bottom: none; }
 
 .badge { padding: 3px 8px; border-radius: 4px; font-weight: bold; color: #ffffff; font-size: 0.9em; }
 .badge-red { background-color: #d9534f; }
@@ -17,6 +21,7 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
 .badge-light-green { background-color: #06b6d4; }
 .badge-green { background-color: #22c55e; }
 .badge-dark-green { background-color: #15803d; }
+
 .progress-bar-bg { background-color: #e3d5cb; border-radius: 8px; height: 10px; width: 100%; margin-top: 5px; margin-bottom: 15px; overflow: hidden; }
 .progress-bar-fill { height: 100%; border-radius: 8px; }
 .admin-link { float: right; font-size: 0.9em; color: #6b4f3f; text-decoration: none; border: 1px solid #6b4f3f; padding: 5px 10px; border-radius: 6px; }
@@ -88,21 +93,27 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
               let total = ptq + pct + dmnh + mdth + mlk + td + ddgtq;
               let totalColor = getColorClass(total, 100);
 
-              // Xử lý chuỗi danh sách trường thành viên
+              // Xử lý danh sách trường thành viên dạng ẩn/hiện có logo ở đầu
               let memberHTML = "";
               if (d.memberNames) {
                   let names = d.memberNames.split(',').map(s => s.trim());
                   let logos = d.memberLogos ? d.memberLogos.split(',').map(s => s.trim()) : [];
-                  memberHTML = `<div style="margin-top: 15px; margin-bottom: 15px;"><strong>Trường thành viên:</strong><br>`;
+                  
+                  memberHTML = `
+                  <details class="member-dropdown">
+                      <summary style="cursor: pointer; font-weight: bold; color: #6b4f3f;">🏛️ Xem danh sách các trường thành viên (${names.length}) ▼</summary>
+                      <div style="margin-top: 10px;">`;
+                  
                   names.forEach((name, idx) => {
-                      let logoUrl = logos[idx] || 'https://via.placeholder.com/45?text=Uni';
+                      let logoUrl = logos[idx] || 'https://via.placeholder.com/35?text=Logo';
                       memberHTML += `
-                      <span class="member-unit">
-                          <img src="${logoUrl}" class="logo-con" onerror="this.src='https://via.placeholder.com/45?text=Logo'">
-                          ${name}
-                      </span>`;
+                      <div class="member-item">
+                          <img src="${logoUrl}" class="logo-con" onerror="this.src='https://via.placeholder.com/35?text=Logo'">
+                          <span><strong>${name}</strong></span>
+                      </div>`;
                   });
-                  memberHTML += `</div>`;
+                  
+                  memberHTML += `</div></details>`;
               }
 
               htmlContent += `
