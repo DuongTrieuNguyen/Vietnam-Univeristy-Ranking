@@ -26,7 +26,7 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
 
 <div class="card">
     <h2>Bảng xếp hạng và đánh giá các Đại học ở Việt Nam</h2>
-    <p>Tiên học lễ, hậu học văn — Dữ liệu đồng bộ trực tiếp từ hệ thống mây.</p>
+    <p>Tiên học lễ, hậu học văn — Dữ liệu đồng bộ trực tiếp từ hệ thống mây[cite: 5].</p>
 </div>
 
 <h1>Danh mục trường đã xếp hạng</h1>
@@ -80,8 +80,10 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
               let mdth = Number(d.mdth) || 0;
               let mlk = Number(d.mlk) || 0;
               let td = Number(d.td) || 0;
+              let ddgtq = Number(d.ddgtq) || 0;
 
-              let total = ptq + pct + dmnh + mdth + mlk + td;
+              // Tổng điểm cộng dồn chuẩn xác 7 tiêu chí theo v6.2
+              let total = ptq + pct + dmnh + mdth + mlk + td + ddgtq;
               let totalColor = getColorClass(total, 100);
 
               htmlContent += `
@@ -115,8 +117,9 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
                           </div>
                           <div><strong>6. Điểm thi đua:</strong> <span class="badge ${getColorClass(td, 15)}">~${td} / 15 điểm</span>
                               <div class="progress-bar-bg"><div class="progress-bar-fill ${getColorClass(td, 15)}" style="width: ${(td/15)*100}%;"></div></div>
-                              <div><strong>7. Điểm đánh giá tổng quát:</strong> <span class="badge ${getColorClass(td, 10)}">~${td} / 10 điểm</span>
-                              <div class="progress-bar-bg"><div class="progress-bar-fill ${getColorClass(td, 10)}" style="width: ${(td/10)*100}%;"></div></div>
+                          </div>
+                          <div><strong>7. Điểm đánh giá tổng quát:</strong> <span class="badge ${getColorClass(ddgtq, 10)}">~${ddgtq} / 10 điểm</span>
+                              <div class="progress-bar-bg"><div class="progress-bar-fill ${getColorClass(ddgtq, 10)}" style="width: ${(ddgtq/10)*100}%;"></div></div>
                           </div>
                       </div>
                   </details>
