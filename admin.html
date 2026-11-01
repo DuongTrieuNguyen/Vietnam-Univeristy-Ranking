@@ -10,9 +10,9 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #5c4033; }
 .form-group input, .form-group textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #e3d5cb; background-color: #fffcf9; font-family: Cambria; box-sizing: border-box; }
-.btn { background-color: #6b4f3f; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: Cambria; font-size: 1em; }
+.btn { background-color: #6b4f3f; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: Cambria; font-size: 1em; margin-top: 15px; }
 .btn:hover { background-color: #553d31; }
-.btn-danger { background-color: #d9534f; padding: 8px 15px; font-size: 0.9em; }
+.btn-danger { background-color: #d9534f; padding: 8px 15px; font-size: 0.9em; margin-top: 0; }
 .btn-danger:hover { background-color: #c9302c; }
 .back-link { display: inline-block; margin-bottom: 20px; color: #6b4f3f; text-decoration: none; font-weight: bold; }
 #adminPanel { display: none; }
@@ -52,7 +52,10 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
         <div style="display: flex; gap: 15px;">
             <div class="form-group" style="flex: 1;"><label>5. Mức liên kết (x15):</label><input type="number" id="scoreMLK" value="22.3" step="0.01"></div>
             <div class="form-group" style="flex: 1;"><label>6. Điểm thi đua (x15):</label><input type="number" id="scoreTD" value="11.4" step="0.01"></div>
-            <div class="form-group" style="flex: 1;"><label>7. Điểm đánh giá tổng quát (x10):</label><input type="number" id="scoreTD" value="11.4" step="0.01"></div>
+        </div>
+        <div class="form-group">
+            <label>7. Điểm đánh giá tổng quát (Lấy từ file x10):</label>
+            <input type="number" id="scoreDDGTQ" value="20" step="0.1">
         </div>
 
         <button class="btn" onclick="addNewUniversity()">💾 Lưu Lên Hệ Thống Mây</button>
@@ -100,11 +103,12 @@ body { background-color: #fcf8f5; color: #4a3b32; font-family: Cambria; padding:
       let mdth = parseFloat(document.getElementById('scoreMDTH').value) || 0;
       let mlk = parseFloat(document.getElementById('scoreMLK').value) || 0;
       let td = parseFloat(document.getElementById('scoreTD').value) || 0;
+      let ddgtq = parseFloat(document.getElementById('scoreDDGTQ').value) || 0; // Đã bổ sung biến số 7
 
       if(!name) { alert("Vui lòng nhập tên trường!"); return; }
 
       try {
-          await addDoc(collection(db, "universities"), { name, logo, desc, ptq, pct, dmnh, mdth, mlk, td, createdAt: new Date() });
+          await addDoc(collection(db, "universities"), { name, logo, desc, ptq, pct, dmnh, mdth, mlk, td, ddgtq, createdAt: new Date() });
           alert("Thêm trường thành công!");
           loadAdminList();
       } catch (e) { alert("Lỗi: " + e.message); }
